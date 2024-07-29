@@ -8,13 +8,6 @@ export default defineConfig({
     exclude: ["react-icons"],
   },
   server: {
-    port: 3000,
-    proxy: {
-      "/api": {
-        target: "http://localhost:80/african-vibes-ecommnerce-backend",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
+    port: 3001,
   },
 });

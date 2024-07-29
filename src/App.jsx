@@ -5,21 +5,22 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
+import PlayerList from "./components/PlayerList.jsx";
+import PlayerForm from "./components/PlayerForm.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
-      <Route path="*" element={<NotFound />} />
+      <Route index element={<PlayerList />} />
+      <Route path="/add-player" element={<PlayerForm />} />
+      <Route path="/edit-player/:id" element={<PlayerForm />} />
+      <Route path="*" element={<h1>NotFound</h1>} />
     </Route>
   )
 );
 
 function App() {
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
