@@ -3,17 +3,17 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaSearch, FaPlus } from "react-icons/fa";
 
-const PlayerList = () => {
-  const [players, setPlayers] = useState([]);
-  const [filteredPlayers, setFilteredPlayers] = useState([]);
+const GoalList = () => {
+  const [goals, setGoals] = useState([]);
+  const [filteredGoals, setFilteredGoals] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost/football_dashboard/player.php")
+      .get("http://localhost/football_dashboard/goals.php?fetchGoals=true")
       .then((response) => {
-        setPlayers(response.data);
-        setFilteredPlayers(response.data);
+        setGoals(response.data);
+        setFilteredGoals(response.data);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -23,24 +23,22 @@ const PlayerList = () => {
     setSearchTerm(term);
 
     if (term !== "") {
-      const filtered = players.filter((player) =>
-        player.PlayerName.toLowerCase().includes(term.toLowerCase())
+      const filtered = goals.filter((goal) =>
+        goal.PlayerName.toLowerCase().includes(term.toLowerCase())
       );
-      setFilteredPlayers(filtered);
+      setFilteredGoals(filtered);
     } else {
-      setFilteredPlayers(players);
+      setFilteredGoals(goals);
     }
   };
 
-  const deletePlayer = (id) => {
+  const deleteGoal = (id) => {
     axios
-      .delete(`http://localhost/football_dashboard/player.php?PlayerID=${id}`)
+      .delete(`http://localhost/football_dashboard/goals.php?GoalID=${id}`)
       .then(() => {
-        const updatedPlayers = players.filter(
-          (player) => player.PlayerID !== id
-        );
-        setPlayers(updatedPlayers);
-        setFilteredPlayers(updatedPlayers);
+        const updatedGoals = goals.filter((goal) => goal.GoalID !== id);
+        setGoals(updatedGoals);
+        setFilteredGoals(updatedGoals);
       })
       .catch((error) => console.error(error));
   };
@@ -49,7 +47,7 @@ const PlayerList = () => {
     <div className="max-w-7xl md:mx-auto px-5 mt-10 md:px-10 lg:px-20">
       <div>
         <h2 className="text-3xl tracking-wider font-semibold mb-5 leading-tight">
-          PLAYERS
+          GOALS
         </h2>
       </div>
       <div className="my-2 flex items-center gap-2 w-full">
@@ -65,16 +63,16 @@ const PlayerList = () => {
           />
         </div>
         <Link
-          to="/add-player"
+          to="/add-goal"
           className="bg-blue-500 text-white py-2 px-4 rounded-r sm:hidden"
         >
           <FaPlus />
         </Link>
         <Link
-          to="/add-player"
+          to="/add-goal"
           className="bg-blue-500 text-white hidden sm:block sm:py-2 text-center sm:px-4 sm:w-[150px] sm:rounded-r"
         >
-          Add Player
+          Add Goal
         </Link>
       </div>
       <div className="mx-auto">
@@ -88,68 +86,44 @@ const PlayerList = () => {
                       Player Name
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Position
+                      Opponents
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Goals
+                      Date
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Assists
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Matches Played
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Department
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Programme
+                      TimeScored
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPlayers.map((player) => (
-                    <tr key={player.PlayerID}>
+                  {filteredGoals.map((goal) => (
+                    <tr key={goal.GoalID}>
                       <td className="px-5 py-5 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {player.PlayerName}
+                          {goal.PlayerName}
                         </p>
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap text-center">
-                          {player.Position}
+                          {goal.Opponent}
                         </p>
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap text-center">
-                          {player.Goals}
+                          {goal.Date}
                         </p>
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap text-center">
-                          {player.Assists}
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap text-center">
-                          {player.MatchesPlayed}
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {player.Department}
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {player.Programme}
+                          {goal.TimeScored}
                         </p>
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
                         <Link
-                          to={`/edit-player/${player.PlayerID}`}
+                          to={`/edit-goal/${goal.GoalID}`}
                           className="bg-blue-500 text-white py-2 px-4 rounded-md"
                         >
                           Edit
@@ -157,7 +131,7 @@ const PlayerList = () => {
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
                         <button
-                          onClick={() => deletePlayer(player.PlayerID)}
+                          onClick={() => deleteGoal(goal.GoalID)}
                           className="bg-red-500 text-white py-2 px-4 rounded-md"
                         >
                           Delete
@@ -170,7 +144,7 @@ const PlayerList = () => {
 
               <div className="px-5 py-5 bg-white border-t">
                 <span className="text-xs xs:text-sm text-gray-900">
-                  Showing {filteredPlayers.length} players
+                  Showing {filteredGoals.length} goals
                 </span>
               </div>
             </div>
@@ -181,4 +155,4 @@ const PlayerList = () => {
   );
 };
 
-export default PlayerList;
+export default GoalList;

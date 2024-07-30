@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-const PlayerForm = () => {
-  const [player, setPlayer] = useState({
+const GoalForm = () => {
+  const [goal, setGoal] = useState({
+    GoalID: null,
     PlayerID: null,
+    MatchID: null,
     PlayerName: "",
-    Position: "",
-    Goals: 0,
-    Assists: 0,
-    MatchesPlayed: 0,
-    Department: "",
-    Programme: "",
+    Opponent: "",
+    Date: "",
+    TimeScored: "",
   });
   const history = useNavigate();
   const { id } = useParams();
@@ -19,18 +18,17 @@ const PlayerForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/player.php?PlayerID=${id}`)
+        .get(`http://localhost/football_dashboard/goal.php?GoalID=${id}`)
         .then((response) => {
           const data = response.data;
-          setPlayer({
+          setGoal({
+            GoalID: data.GoalID || null,
             PlayerID: data.PlayerID || null,
+            MatchID: data.MatchID || null,
             PlayerName: data.PlayerName || "",
-            Position: data.Position || "",
-            Goals: data.Goals || 0,
-            Assists: data.Assists || 0,
-            MatchesPlayed: data.MatchesPlayed || 0,
-            Department: data.Department || "",
-            Programme: data.Programme || "",
+            Opponent: data.Opponent || "",
+            Date: data.Date || "",
+            TimeScored: data.TimeScored || "",
           });
         })
         .catch((error) => console.error(error));
@@ -40,28 +38,28 @@ const PlayerForm = () => {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const val = type === "number" ? Number(value) : value;
-    setPlayer({ ...player, [name]: val });
+    setGoal({ ...goal, [name]: val });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (id) {
       axios
-        .put(`http://localhost/football_dashboard/player.php`, player, {
+        .put(`http://localhost/football_dashboard/goals.php`, goal, {
           headers: {
             "Content-Type": "application/json",
           },
         })
-        .then(() => history("/", { replace: true }))
+        .then(() => history("/goals", { replace: true }))
         .catch((error) => console.error(error));
     } else {
       axios
-        .post(`http://localhost/football_dashboard/player.php`, player, {
+        .post(`http://localhost/football_dashboard/goals.php`, goal, {
           headers: {
             "Content-Type": "application/json",
           },
         })
-        .then(() => history("/", { replace: true }))
+        .then(() => history("/goals", { replace: true }))
         .catch((error) => console.error(error));
     }
   };
@@ -70,7 +68,7 @@ const PlayerForm = () => {
     <div className="max-w-7xl md:mx-auto px-5 md:px-10 lg:px-20">
       <div className="flex items-center justify-center flex-col my-6">
         <h2 className="text-center text-4xl mb-1">
-          {id ? "Edit Player" : "Add New Player"}
+          {id ? "Edit Goal" : "Add New Goal"}
         </h2>
       </div>
       <form
@@ -78,79 +76,46 @@ const PlayerForm = () => {
         onSubmit={handleSubmit}
       >
         {/* Form fields here */}
-        <div className="flex flex-col gap-1 mt-4 md:w-full">
+        <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
           <label>Player Name</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
             type="text"
             name="PlayerName"
-            value={player.PlayerName}
+            value={goal.PlayerName}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Position</label>
+          <label>Opponents</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
             type="text"
-            name="Position"
-            value={player.Position}
+            name="Opponents"
+            value={goal.Opponent}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Goals</label>
+          <label>Date</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="number"
-            name="Goals"
-            value={player.Goals}
+            type="date"
+            name="Date"
+            value={goal.Date}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Assists</label>
-          <input
-            className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="number"
-            name="Assists"
-            value={player.Assists}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Matches Played</label>
-          <input
-            className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="number"
-            name="MatchesPlayed"
-            value={player.MatchesPlayed}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Department</label>
+          <label>TimeScored</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
             type="text"
-            name="Department"
-            value={player.Department}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Programme</label>
-          <input
-            className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="text"
-            name="Programme"
-            value={player.Programme}
+            name="TimeScored"
+            value={goal.TimeScored}
             onChange={handleChange}
           />
         </div>
@@ -166,4 +131,4 @@ const PlayerForm = () => {
   );
 };
 
-export default PlayerForm;
+export default GoalForm;
