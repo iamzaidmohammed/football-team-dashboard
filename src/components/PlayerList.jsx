@@ -5,20 +5,43 @@ import { FaSearch, FaPlus } from "react-icons/fa";
 
 const PlayerList = () => {
   const [players, setPlayers] = useState([]);
+  const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axios
       .get("http://localhost/football_dashboard/player.php")
-      .then((response) => setPlayers(response.data))
+      .then((response) => {
+        setPlayers(response.data);
+        setFilteredPlayers(response.data); // Initialize filteredPlayers with all players
+      })
       .catch((error) => console.error(error));
   }, []);
+
+  const handleSearch = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+
+    if (term !== "") {
+      const filtered = players.filter((player) =>
+        player.PlayerName.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredPlayers(filtered);
+    } else {
+      setFilteredPlayers(players); // Show all players if search term is empty
+    }
+  };
 
   const deletePlayer = (id) => {
     axios
       .delete(`http://localhost/football_dashboard/player.php?PlayerID=${id}`)
-      .then(() =>
-        setPlayers(players.filter((player) => player.PlayerID !== id))
-      )
+      .then(() => {
+        const updatedPlayers = players.filter(
+          (player) => player.PlayerID !== id
+        );
+        setPlayers(updatedPlayers);
+        setFilteredPlayers(updatedPlayers); // Update filteredPlayers as well
+      })
       .catch((error) => console.error(error));
   };
 
@@ -35,18 +58,18 @@ const PlayerList = () => {
             <FaSearch />
           </span>
           <input
+            value={searchTerm}
+            onChange={handleSearch}
             placeholder="Search"
             className="appearance-none w-full rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:border-blue-500 focus:border-2 focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           />
         </div>
-        {/* Mobile btn */}
         <Link
           to="/add-player"
           className="bg-blue-500 text-white py-2 px-4 rounded-r sm:hidden"
         >
           <FaPlus />
         </Link>
-        {/* Desktop btn */}
         <Link
           to="/add-player"
           className="bg-blue-500 text-white hidden sm:block sm:py-2 text-center sm:px-4 sm:w-[150px] sm:rounded-r"
@@ -54,7 +77,6 @@ const PlayerList = () => {
           Add Player
         </Link>
       </div>
-      {/* Table to display players */}
       <div className="mx-auto">
         <div className="py-8 px-4 md:px-8">
           <div className="-mx-4 sm:-mx-8 overflow-x-auto">
@@ -88,7 +110,7 @@ const PlayerList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {players.map((player) => (
+                  {filteredPlayers.map((player) => (
                     <tr key={player.PlayerID}>
                       <td className="px-5 py-5 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
@@ -148,7 +170,7 @@ const PlayerList = () => {
 
               <div className="px-5 py-5 bg-white border-t">
                 <span className="text-xs xs:text-sm text-gray-900">
-                  Showing {players.length} players
+                  Showing {filteredPlayers.length} players
                 </span>
               </div>
             </div>
