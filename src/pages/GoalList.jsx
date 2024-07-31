@@ -107,7 +107,7 @@ const GoalList = () => {
                         </p>
                       </td>
                       <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap text-center">
+                        <p className="text-gray-900 whitespace-no-wrap">
                           {goal.Opponent}
                         </p>
                       </td>

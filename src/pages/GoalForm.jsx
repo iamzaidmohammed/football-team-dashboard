@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const GoalForm = () => {
   const [goal, setGoal] = useState({
-    GoalID: null,
-    PlayerID: null,
-    MatchID: null,
+    GoalID: "",
+    PlayerID: "",
+    MatchID: "",
     PlayerName: "",
     Opponent: "",
     Date: "",
@@ -18,13 +18,13 @@ const GoalForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/goal.php?GoalID=${id}`)
+        .get(`http://localhost/football_dashboard/goals.php?GoalID=${id}`)
         .then((response) => {
           const data = response.data;
           setGoal({
-            GoalID: data.GoalID || null,
-            PlayerID: data.PlayerID || null,
-            MatchID: data.MatchID || null,
+            GoalID: data.GoalID || "",
+            PlayerID: data.PlayerID || "",
+            MatchID: data.MatchID || "",
             PlayerName: data.PlayerName || "",
             Opponent: data.Opponent || "",
             Date: data.Date || "",
@@ -45,11 +45,15 @@ const GoalForm = () => {
     e.preventDefault();
     if (id) {
       axios
-        .put(`http://localhost/football_dashboard/goals.php`, goal, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .put(
+          `http://localhost/football_dashboard/goals.php?GoalID=${id}`,
+          goal,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then(() => history("/goals", { replace: true }))
         .catch((error) => console.error(error));
     } else {
@@ -77,23 +81,23 @@ const GoalForm = () => {
       >
         {/* Form fields here */}
         <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Player Name</label>
+          <label>PlayerID</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="text"
-            name="PlayerName"
-            value={goal.PlayerName}
+            type="number"
+            name="PlayerID"
+            value={goal.PlayerID}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-1 mt-4 md:w-[48%]">
-          <label>Opponents</label>
+          <label>MatchID</label>
           <input
             className="text-center bg-transparent border-2 py-2 outline-none border-blue-500"
-            type="text"
-            name="Opponents"
-            value={goal.Opponent}
+            type="number"
+            name="MatchID"
+            value={goal.MatchID}
             onChange={handleChange}
           />
         </div>
