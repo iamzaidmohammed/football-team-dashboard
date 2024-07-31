@@ -14,6 +14,7 @@ const GoalForm = () => {
   });
   const history = useNavigate();
   const { id } = useParams();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -43,30 +44,39 @@ const GoalForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (id) {
-      axios
-        .put(
-          `http://localhost/football_dashboard/goals.php?GoalID=${id}`,
-          goal,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then(() => history("/goals", { replace: true }))
-        .catch((error) => console.error(error));
-    } else {
-      axios
-        .post(`http://localhost/football_dashboard/goals.php`, goal, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then(() => history("/goals", { replace: true }))
-        .catch((error) => console.error(error));
-    }
+    const url = id
+      ? `http://localhost/football_dashboard/goals.php?GoalID=${id}`
+      : "http://localhost/football_dashboard/goals.php";
+
+    const method = id ? "put" : "post";
+
+    axios({
+      method: method,
+      url: url,
+      data: goal,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.data.error) {
+          setErrorMessage(response.data.error);
+        } else {
+          history("/goals", { replace: true });
+        }
+      })
+      .catch((error) => console.error(error));
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   return (
     <div className="max-w-7xl md:mx-auto px-5 md:px-10 lg:px-20">
@@ -75,6 +85,9 @@ const GoalForm = () => {
           {id ? "Edit Goal" : "Add New Goal"}
         </h2>
       </div>
+      {errorMessage && (
+        <p className="text-center text-lg text-red-500 pt-3">{errorMessage}</p>
+      )}
       <form
         className="py-2 md:flex md:flex-row md:flex-wrap md:gap-5"
         onSubmit={handleSubmit}
