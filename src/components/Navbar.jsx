@@ -25,9 +25,6 @@ const Navbar = () => {
           <NavLink to="/goals" className={linkClass}>
             Goals
           </NavLink>
-          <NavLink to="/assists" className={linkClass}>
-            Assists
-          </NavLink>
         </div>
       </div>
     </nav>
