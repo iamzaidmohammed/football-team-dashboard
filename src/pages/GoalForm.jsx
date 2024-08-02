@@ -19,7 +19,9 @@ const GoalForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/goals.php?GoalID=${id}`)
+        .get(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/goals.php?GoalID=${id}`
+        )
         .then((response) => {
           const data = response.data;
           setGoal({
@@ -45,8 +47,8 @@ const GoalForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const url = id
-      ? `http://localhost/football_dashboard/goals.php?GoalID=${id}`
-      : "http://localhost/football_dashboard/goals.php";
+      ? `https://football-dashboard-a58827323ebf.herokuapp.com/goals.php?GoalID=${id}`
+      : "https://football-dashboard-a58827323ebf.herokuapp.com/goals.php";
 
     const method = id ? "put" : "post";
 

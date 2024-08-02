@@ -19,7 +19,9 @@ const MatchForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/matches.php?MatchID=${id}`)
+        .get(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/matches.php?MatchID=${id}`
+        )
         .then((response) => {
           const data = response.data;
           setMatch({
@@ -45,8 +47,8 @@ const MatchForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const url = id
-      ? `http://localhost/football_dashboard/matches.php?MatchID=${id}`
-      : "http://localhost/football_dashboard/matches.php";
+      ? `https://football-dashboard-a58827323ebf.herokuapp.com/matches.php?MatchID=${id}`
+      : "https://football-dashboard-a58827323ebf.herokuapp.com/matches.php";
 
     const method = id ? "put" : "post";
 

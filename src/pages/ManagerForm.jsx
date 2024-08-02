@@ -14,7 +14,9 @@ const ManagerForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/manager.php?ManagerID=${id}`)
+        .get(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/manager.php?ManagerID=${id}`
+        )
         .then((response) => {
           const data = response.data;
           setManager({
@@ -37,20 +39,28 @@ const ManagerForm = () => {
     e.preventDefault();
     if (id) {
       axios
-        .put(`http://localhost/football_dashboard/manager.php`, manager, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .put(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/manager.php`,
+          manager,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then(() => history("/managers", { replace: true }))
         .catch((error) => console.error(error));
     } else {
       axios
-        .post(`http://localhost/football_dashboard/manager.php`, manager, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .post(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/manager.php`,
+          manager,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then(() => history("/managers", { replace: true }))
         .catch((error) => console.error(error));
     }

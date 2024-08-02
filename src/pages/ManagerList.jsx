@@ -10,7 +10,7 @@ const ManagerList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/football_dashboard/manager.php")
+      .get("https://football-dashboard-a58827323ebf.herokuapp.com/manager.php")
       .then((response) => {
         setManagers(response.data);
         setFilteredManagers(response.data);
@@ -34,7 +34,9 @@ const ManagerList = () => {
 
   const deleteManager = (id) => {
     axios
-      .delete(`http://localhost/football_dashboard/manager.php?ManagerID=${id}`)
+      .delete(
+        `https://football-dashboard-a58827323ebf.herokuapp.com/manager.php?ManagerID=${id}`
+      )
       .then(() => {
         const updatedManagers = managers.filter(
           (manager) => manager.ManagerID !== id

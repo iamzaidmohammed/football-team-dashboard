@@ -10,7 +10,9 @@ const MatchList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/football_dashboard/matches.php?fetchMatches=true")
+      .get(
+        "https://football-dashboard-a58827323ebf.herokuapp.com/matches.php?fetchMatches=true"
+      )
       .then((response) => {
         setMatches(response.data);
         setFilteredMatches(response.data);
@@ -34,7 +36,9 @@ const MatchList = () => {
 
   const deleteMatch = (id) => {
     axios
-      .delete(`http://localhost/football_dashboard/matches.php?MatchID=${id}`)
+      .delete(
+        `https://football-dashboard-a58827323ebf.herokuapp.com/matches.php?MatchID=${id}`
+      )
       .then(() => {
         const updatedMatches = matches.filter((match) => match.MatchID !== id);
         setMatches(updatedMatches);

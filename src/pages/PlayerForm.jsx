@@ -19,7 +19,9 @@ const PlayerForm = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost/football_dashboard/player.php?PlayerID=${id}`)
+        .get(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/player.php?PlayerID=${id}`
+        )
         .then((response) => {
           const data = response.data;
           setPlayer({
@@ -47,20 +49,28 @@ const PlayerForm = () => {
     e.preventDefault();
     if (id) {
       axios
-        .put(`http://localhost/football_dashboard/player.php`, player, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .put(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/player.php`,
+          player,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then(() => history("/", { replace: true }))
         .catch((error) => console.error(error));
     } else {
       axios
-        .post(`http://localhost/football_dashboard/player.php`, player, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .post(
+          `https://football-dashboard-a58827323ebf.herokuapp.com/player.php`,
+          player,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then(() => history("/", { replace: true }))
         .catch((error) => console.error(error));
     }

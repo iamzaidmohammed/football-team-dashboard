@@ -10,7 +10,9 @@ const GoalList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/football_dashboard/goals.php?fetchGoals=true")
+      .get(
+        "https://football-dashboard-a58827323ebf.herokuapp.com/goals.php?fetchGoals=true"
+      )
       .then((response) => {
         setGoals(response.data);
         setFilteredGoals(response.data);
@@ -34,7 +36,9 @@ const GoalList = () => {
 
   const deleteGoal = (id) => {
     axios
-      .delete(`http://localhost/football_dashboard/goals.php?GoalID=${id}`)
+      .delete(
+        `https://football-dashboard-a58827323ebf.herokuapp.com/goals.php?GoalID=${id}`
+      )
       .then(() => {
         const updatedGoals = goals.filter((goal) => goal.GoalID !== id);
         setGoals(updatedGoals);

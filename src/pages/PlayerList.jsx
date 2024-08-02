@@ -10,7 +10,7 @@ const PlayerList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/football_dashboard/player.php")
+      .get("https://football-dashboard-a58827323ebf.herokuapp.com/player.php")
       .then((response) => {
         setPlayers(response.data);
         setFilteredPlayers(response.data);
@@ -34,7 +34,9 @@ const PlayerList = () => {
 
   const deletePlayer = (id) => {
     axios
-      .delete(`http://localhost/football_dashboard/player.php?PlayerID=${id}`)
+      .delete(
+        `https://football-dashboard-a58827323ebf.herokuapp.com/player.php?PlayerID=${id}`
+      )
       .then(() => {
         const updatedPlayers = players.filter(
           (player) => player.PlayerID !== id
